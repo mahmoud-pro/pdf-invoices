@@ -6,8 +6,6 @@ from pathlib import Path
 filepaths = glob.glob("./Invoices/*.xlsx")
 
 for filepath in filepaths:
-
-
     filename = Path(filepath).stem
     invoice_number, date = filename.split("-")
     pdf = FPDF(orientation="P", unit="mm", format="A4")
@@ -42,6 +40,24 @@ for filepath in filepaths:
         pdf.cell(w=40, h=8, txt=str(row["amount_purchased"]), border=1)
         pdf.cell(w=35, h=8, txt=str(row["price_per_unit"]), border=1)
         pdf.cell(w=25, h=8, txt=str(row["total_price"]), border=1, ln=1)
+
+    total = df["total_price"].sum()
+    pdf.set_font(family="Courier", size=10)
+    pdf.set_text_color(80, 80, 80)
+    pdf.cell(w=30, h=8, txt="", border=1)
+    pdf.cell(w=55, h=8, txt="", border=1)
+    pdf.cell(w=40, h=8, txt="", border=1)
+    pdf.cell(w=35, h=8, txt="", border=1)
+    pdf.cell(w=25, h=8, txt=str(total), border=1, ln=1)
+
+    pdf.set_font(family="Courier", size=10)
+    pdf.set_text_color(0, 0, 0)
+    pdf.cell(w=30, h=8, txt=f"total price = {total}", ln=1)
+
+    pdf.set_font(family="Courier", size=10, style="B")
+    pdf.set_text_color(0, 0, 0)
+    pdf.cell(w=30, h=8, txt=f"Mahmoud Taha")
+    pdf.image("./invoices/python.png", w=7, h=7)
 
     pdf.output(f"PDF/{filename}.pdf")
 
